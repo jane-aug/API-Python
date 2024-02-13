@@ -3,8 +3,12 @@ import requests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
+import allure
+
 
 '''' '''
+
+@allure.epic("Auth case")
 class TestUserAuth(BaseCase):
     exclude_params = [
         ("no_cookie"),
@@ -34,6 +38,9 @@ class TestUserAuth(BaseCase):
         #self.token = response.headers.get("x-csrf-token")
         #self.user_id = response.json()["user_id"]
 
+    @allure.description("Success test auth")
+    @allure.severity("value = SeverityLevel.BLOCKER")
+    @allure.step("Start test")
     def test_auth_user(self):
         response2 = MyRequests.get("/user/auth",
                                  headers={"x-csrf-token": self.token},
@@ -47,6 +54,9 @@ class TestUserAuth(BaseCase):
 
 
     @pytest.mark.parametrize('condition', exclude_params)
+    @allure.description("Faild test auth")
+    @allure.severity("value = SeverityLevel.BLOCKER")
+    @allure.step("Start test")
     def test_negativ_auth_check(self, condition):
         if condition == "no_cookie":
             response2 = requests.get("https://playground.learnqa.ru/api/user/auth",
